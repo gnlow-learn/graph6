@@ -20,6 +20,24 @@ class UndirectedSimple {
         this.data.add(this.ref(i, j))
         return this
     }
+    has(i: number, j: number) {
+        return this.data.has(this.ref(i, j))
+    }
+    
+    toGraph6() {
+        let str = ""
+        tri(this.n-1).forEach(i =>
+            tri(i+1).forEach(j =>
+                str += this.has(i, j) ? "1" : "0"
+            )
+        )
+
+        return String.fromCharCode(this.n+63)
+            + str.replaceAll(
+                /.{6}/g,
+                x => String.fromCharCode(parseInt(x, 2)+63),
+            )
+    }
 }
 
 const graph6 =
@@ -35,12 +53,14 @@ const graph6 =
     tri(n-1).forEach(i =>
         tri(i+1).forEach(j =>
             str[k++] == "1" && g.add(i, j)
-        ))
+        )
+    )
     
     return g
 }
     
 
 console.log(
-    graph6("CF")
+    graph6("C`"),
+    graph6("C`").toGraph6(),
 )
