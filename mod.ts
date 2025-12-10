@@ -35,8 +35,8 @@ export class UndirectedSimple {
 
         return String.fromCharCode(this.n+63)
             + str.replaceAll(
-                /.{6}/g,
-                x => String.fromCharCode(parseInt(x, 2)+63),
+                /.{1,6}/g,
+                x => String.fromCharCode(parseInt(x.padEnd(6, "0"), 2)+63),
             )
     }
     toAdjMat() {
