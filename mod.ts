@@ -17,7 +17,8 @@ class UndirectedSimple {
         return [i, j].toSorted().join(",")
     }
     add(i: number, j: number) {
-        this.data.add(this.ref(i, j))
+        if (i != j)
+            this.data.add(this.ref(i, j))
         return this
     }
     has(i: number, j: number) {
@@ -28,7 +29,7 @@ class UndirectedSimple {
         let str = ""
         tri(this.n-1).forEach(i =>
             tri(i+1).forEach(j =>
-                str += this.has(i, j) ? "1" : "0"
+                str += this.has(i+1, j) ? "1" : "0"
             )
         )
 
@@ -37,6 +38,13 @@ class UndirectedSimple {
                 /.{6}/g,
                 x => String.fromCharCode(parseInt(x, 2)+63),
             )
+    }
+    toAdjMat() {
+        return tri(this.n).map(i =>
+            tri(this.n).map(j =>
+                this.has(i, j) ? 1 : 0
+            ).toArray()
+        ).toArray()
     }
 }
 
@@ -51,16 +59,15 @@ const graph6 =
 
     let k = 0
     tri(n-1).forEach(i =>
-        tri(i+1).forEach(j =>
-            str[k++] == "1" && g.add(i, j)
-        )
+        tri(i+1).forEach(j => {
+            str[k++] == "1" && g.add(i+1, j)
+        })
     )
     
     return g
 }
     
 
-console.log(
-    graph6("C`"),
-    graph6("C`").toGraph6(),
-)
+console.log(graph6("CF"))
+console.log(graph6("CF").toGraph6())
+console.log(graph6("CF").toAdjMat())
