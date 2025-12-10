@@ -7,7 +7,7 @@ const tri =
         .map((_, i) => i)
         .take(n)
 
-class UndirectedSimple {
+export class UndirectedSimple {
     n
     data = new Set<string>
     constructor(n: number) {
@@ -48,7 +48,7 @@ class UndirectedSimple {
     }
 }
 
-const graph6 =
+export const graph6 =
 (s: string) => {
     const [n, ...cs] = s.split("")
         .map(x => x.charCodeAt(0)-63)
@@ -66,8 +66,3 @@ const graph6 =
     
     return g
 }
-    
-
-console.log(graph6("CF"))
-console.log(graph6("CF").toGraph6())
-console.log(graph6("CF").toAdjMat())
