@@ -7,22 +7,39 @@ const tri =
         .map((_, i) => i)
         .take(n)
 
+const insert =
+<A>(as: A[], a: A) =>
+(i: number) =>
+    [...as.slice(0, i), a, ...as.slice(i)]
+
+const permutation =
+(n: number): number[][] =>
+    n == 1
+        ? [[0]]
+        : permutation(n-1)
+            .values()
+            .flatMap(l => tri(n).map(insert(l, n-1)))
+            .toArray()
+
 export class UndirectedSimple {
     n
-    data = new Set<string>
+    edges = new Set<string>
     constructor(n: number) {
         this.n = n
     }
     ref(i: number, j: number) {
         return [i, j].toSorted().join(",")
     }
+    unref(s: string) {
+        return s.split(",").map(Number) as [number, number]
+    }
     add(i: number, j: number) {
         if (i != j)
-            this.data.add(this.ref(i, j))
+            this.edges.add(this.ref(i, j))
         return this
     }
     has(i: number, j: number) {
-        return this.data.has(this.ref(i, j))
+        return this.edges.has(this.ref(i, j))
     }
     
     toGraph6() {
@@ -45,6 +62,27 @@ export class UndirectedSimple {
                 this.has(i, j) ? 1 : 0
             ).toArray()
         ).toArray()
+    }
+
+    static fromEdges(n: number, e: Iterable<string>) {
+        const g = new UndirectedSimple(n)
+        g.edges = new Set(e)
+        return g
+    }
+
+    mapEdge(f: (i: number, j: number) => [i: number, j: number]) {
+        return UndirectedSimple.fromEdges(
+            this.n,
+            this.edges.values()
+                .map(s => this.unref(s))
+                .map(([i, j]) => f(i, j))
+                .map(([i, j]) => this.ref(i, j)),
+        )
+    }
+    isoList() {
+        return permutation(this.n).map(l =>         
+            this.mapEdge((i, j) => [l[i], l[j]])
+        )
     }
 }
 
