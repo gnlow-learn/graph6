@@ -84,6 +84,11 @@ export class UndirectedSimple {
             this.mapEdge((i, j) => [l[i], l[j]])
         )
     }
+    canonical() {
+        return this.isoList()
+            .map(x => x.toGraph6())
+            .toSorted()[0]
+    }
 }
 
 export const graph6 =
